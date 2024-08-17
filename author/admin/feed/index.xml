@@ -9,8 +9,8 @@
 
 <channel>
 	<title>admin &#8211; Chemnad</title>
-	<atom:link href="https://jerielnino.github.io/rednblue/author/admin/feed/" rel="self" type="application/rss+xml" />
-	<link>https://jerielnino.github.io/rednblue</link>
+	<atom:link href="http://rednblue.uk.to/author/admin/feed/" rel="self" type="application/rss+xml" />
+	<link>http://rednblue.uk.to</link>
 	<description></description>
 	<lastBuildDate>Sat, 17 Aug 2024 09:37:15 +0000</lastBuildDate>
 	<language>en-US</language>
@@ -21,20 +21,20 @@
 	<generator>https://wordpress.org/?v=6.6.1</generator>
 	<item>
 		<title>Hello world!</title>
-		<link>https://jerielnino.github.io/rednblue/2024/08/17/hello-world/</link>
-					<comments>https://jerielnino.github.io/rednblue/2024/08/17/hello-world/#comments</comments>
+		<link>http://rednblue.uk.to/2024/08/17/hello-world/</link>
+					<comments>http://rednblue.uk.to/2024/08/17/hello-world/#comments</comments>
 		
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<pubDate>Sat, 17 Aug 2024 09:37:15 +0000</pubDate>
 				<category><![CDATA[Uncategorized]]></category>
-		<guid isPermaLink="false">https://jerielnino.github.io/rednblue/?p=1</guid>
+		<guid isPermaLink="false">http://rednblue.uk.to/?p=1</guid>
 
 					<description><![CDATA[Welcome to WordPress. This is your first post. Edit or delete it, then start writing!]]></description>
 										<content:encoded><![CDATA[
 <p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>
 ]]></content:encoded>
 					
-					<wfw:commentRss>https://jerielnino.github.io/rednblue/2024/08/17/hello-world/feed/</wfw:commentRss>
+					<wfw:commentRss>http://rednblue.uk.to/2024/08/17/hello-world/feed/</wfw:commentRss>
 			<slash:comments>1</slash:comments>
 		
 		
