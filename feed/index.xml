@@ -10,7 +10,7 @@
 <channel>
 	<title>Chemnad</title>
 	<atom:link href="http://rednblue.uk.to/feed/" rel="self" type="application/rss+xml" />
-	<link>http://rednblue.uk.to</link>
+	<link>http://rednblue.uk.to/</link>
 	<description></description>
 	<lastBuildDate>Sat, 17 Aug 2024 09:37:15 +0000</lastBuildDate>
 	<language>en-US</language>
