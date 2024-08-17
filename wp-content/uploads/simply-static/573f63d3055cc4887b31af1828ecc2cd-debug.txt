@@ -1,0 +1,389 @@
+[2024-08-17 10:54:07] [class-ss-archive-creation-job.php:83] Starting a job; no job is presently running
+[2024-08-17 10:54:07] [class-ss-archive-creation-job.php:84] Here's our task list: setup, fetch_urls, generate_404, transfer_files_locally, wrapup
+[2024-08-17 10:54:07] [class-ss-archive-creation-job.php:102] Pushing first task to queue: setup
+[2024-08-17 10:54:07] [class-ss-archive-creation-job.php:136] Current task: setup
+[2024-08-17 10:54:07] [class-ss-archive-creation-job.php:153] Performing task: setup
+[2024-08-17 10:54:07] [class-ss-task.php:44] Status message: [setup] Setting up
+[2024-08-17 10:54:08] [class-ss-setup-task.php:33] Creating archive directory: C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047\
+[2024-08-17 10:54:08] [class-ss-setup-task.php:72] Adding origin URL to queue: http://localhost/rednblue/
+[2024-08-17 10:54:08] [class-ss-setup-task.php:145] Adding files from directory: C:\xampp\htdocs\rednblue\wp-content\uploads
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\Model-4-1.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/Model-4-1.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\Model-4.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/Model-4.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\simply-static\573f63d3055cc4887b31af1828ecc2cd-debug.txt to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/simply-static/573f63d3055cc4887b31af1828ecc2cd-debug.txt
+[2024-08-17 10:54:08] [class-ss-setup-task.php:145] Adding files from directory: C:\xampp\htdocs\rednblue\wp-content\uploads
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\Model-4-1.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/Model-4-1.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\Model-4.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/Model-4.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\2024\08\WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg
+[2024-08-17 10:54:08] [class-ss-setup-task.php:150] Adding file C:\xampp\htdocs\rednblue\wp-content\uploads\simply-static\573f63d3055cc4887b31af1828ecc2cd-debug.txt to queue as: C:/xampp/htdocs/rednblue/wp-content/uploads/simply-static/573f63d3055cc4887b31af1828ecc2cd-debug.txt
+[2024-08-17 10:54:08] [class-ss-setup-task.php:137] File C:\xampp\htdocs\rednblue\wp-content\plugins\simply-static//src/integrations/simply-cdn/assets/ssh-form-webhook.js exists; adding to queue as: C:/xampp/htdocs/rednblue/wp-content/plugins/simply-static//src/integrations/simply-cdn/assets/ssh-form-webhook.js
+[2024-08-17 10:54:08] [class-ss-archive-creation-job.php:175] We've found our next task: fetch_urls
+[2024-08-17 10:54:08] [class-ss-archive-creation-job.php:136] Current task: fetch_urls
+[2024-08-17 10:54:08] [class-ss-archive-creation-job.php:153] Performing task: fetch_urls
+[2024-08-17 10:54:08] [class-ss-fetch-urls-task.php:69] Total pages: 8; Pages remaining: 8
+[2024-08-17 10:54:08] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/
+[2024-08-17 10:54:08] [class-ss-task.php:58] [PAGES STATUS] Remaining:8; Total: 8
+[2024-08-17 10:54:08] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:08] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c081500f010-XXAMKL.tmp
+[2024-08-17 10:54:08] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/?simply_static_page=1
+[2024-08-17 10:54:08] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/?simply_static_page=1
+[2024-08-17 10:54:08] [class-ss-url-fetcher.php:103] Filesize: 56753 bytes
+[2024-08-17 10:54:08] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: text/html; charset=UTF-8
+[2024-08-17 10:54:08] [class-ss-url-fetcher.php:233] New filename for static page: /index.html
+[2024-08-17 10:54:08] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c081500f010-XXAMKL.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/index.html
+[2024-08-17 10:54:08] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:08] [class-ss-fetch-urls-task.php:159] Adding 10 URLs to the queue
+[2024-08-17 10:54:08] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:09] [class-ss-page.php:118] Checking Content Identical:f4f068af238be39bf56c923588b948cb6ea0c8cd===. Value: FALSE
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/Model-4-1.jpg
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:7; Total: 8
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/Model-4.jpg
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:6; Total: 8
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:5; Total: 8
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 8
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 8
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: C:/xampp/htdocs/rednblue/wp-content/uploads/simply-static/573f63d3055cc4887b31af1828ecc2cd-debug.txt
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 8
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: C:/xampp/htdocs/rednblue/wp-content/plugins/simply-static//src/integrations/simply-cdn/assets/ssh-form-webhook.js
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 8
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2024-08-17 10:54:09] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 0 of 8 pages/files
+[2024-08-17 10:54:09] [class-ss-archive-creation-job.php:181] We're not done with the fetch_urls task yet
+[2024-08-17 10:54:09] [class-ss-archive-creation-job.php:136] Current task: fetch_urls
+[2024-08-17 10:54:09] [class-ss-archive-creation-job.php:153] Performing task: fetch_urls
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:69] Total pages: 18; Pages remaining: 10
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:10; Total: 18
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c0815110b0a-iMmrMj.tmp
+[2024-08-17 10:54:09] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg?simply_static_page=9
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg?simply_static_page=9
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:103] Filesize: 266815 bytes
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: image/jpeg
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:233] New filename for static page: /wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c0815110b0a-iMmrMj.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-18.54.26_4f793431.jpg
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:159] Adding 0 URLs to the queue
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:09] [class-ss-page.php:118] Checking Content Identical:dd6bd41b910e6b8cc4640c7bb416f9a2e233f658===. Value: FALSE
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:9; Total: 18
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08151173e3-4VlAGr.tmp
+[2024-08-17 10:54:09] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg?simply_static_page=10
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg?simply_static_page=10
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:103] Filesize: 203068 bytes
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: image/jpeg
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:233] New filename for static page: /wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08151173e3-4VlAGr.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-00.43.34_1bb7f599.jpg
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:159] Adding 0 URLs to the queue
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:09] [class-ss-page.php:118] Checking Content Identical:0e489e3cbb212d0fea5cbcb04118fa5df38a7769===. Value: FALSE
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:8; Total: 18
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c0815120eb9-VvjXSR.tmp
+[2024-08-17 10:54:09] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg?simply_static_page=11
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/wp-content/uploads/2024/08/WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg?simply_static_page=11
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:103] Filesize: 452348 bytes
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: image/jpeg
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:233] New filename for static page: /wp-content/uploads/2024/08/WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c0815120eb9-VvjXSR.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/wp-content/uploads/2024/08/WhatsApp-Image-2024-04-09-at-21.13.30_097fcf15.jpg
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:159] Adding 0 URLs to the queue
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:09] [class-ss-page.php:118] Checking Content Identical:2c0cc17305a8919e65d3b776a21a9ba0ff04f88f===. Value: FALSE
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/&
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:7; Total: 18
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c081512d3b8-DbcHjN.tmp
+[2024-08-17 10:54:09] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/&?simply_static_page=12
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/&?simply_static_page=12
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:103] Filesize: 35609 bytes
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:119] http_status_code: 404 | content_type: text/html; charset=UTF-8
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:147] We weren't able to establish a filename; deleting temp file
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c081519191e-7V4dwp.tmp
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/&
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:103] Filesize: 35609 bytes
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:119] http_status_code: 404 | content_type: text/html; charset=UTF-8
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:147] We weren't able to establish a filename; deleting temp file
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/feed/
+[2024-08-17 10:54:09] [class-ss-task.php:58] [PAGES STATUS] Remaining:6; Total: 18
+[2024-08-17 10:54:09] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08151f1d49-pa4Y2U.tmp
+[2024-08-17 10:54:09] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/feed/?simply_static_page=13
+[2024-08-17 10:54:09] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/feed/?simply_static_page=13
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:103] Filesize: 1686 bytes
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: application/rss+xml; charset=UTF-8
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:233] New filename for static page: /feed/index.xml
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08151f1d49-pa4Y2U.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/feed/index.xml
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:159] Adding 5 URLs to the queue
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:10] [class-ss-page.php:118] Checking Content Identical:05c8ab52b2e5888fdd79affb4d42fed386af2c53===. Value: FALSE
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/comments/feed/
+[2024-08-17 10:54:10] [class-ss-task.php:58] [PAGES STATUS] Remaining:5; Total: 18
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c0815257fe4-tmIHpy.tmp
+[2024-08-17 10:54:10] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/comments/feed/?simply_static_page=14
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/comments/feed/?simply_static_page=14
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:103] Filesize: 1663 bytes
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: application/rss+xml; charset=UTF-8
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:233] New filename for static page: /comments/feed/index.xml
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c0815257fe4-tmIHpy.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/comments/feed/index.xml
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:159] Adding 4 URLs to the queue
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:10] [class-ss-page.php:118] Checking Content Identical:0857c7c59a1340643d2fe3a218778dd596cc7aad===. Value: FALSE
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-content/themes/frost/style.css
+[2024-08-17 10:54:10] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 18
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08152b0b91-7buwlv.tmp
+[2024-08-17 10:54:10] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/wp-content/themes/frost/style.css?simply_static_page=15
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/wp-content/themes/frost/style.css?simply_static_page=15
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:103] Filesize: 4542 bytes
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: text/css
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:233] New filename for static page: /wp-content/themes/frost/style.css
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08152b0b91-7buwlv.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/wp-content/themes/frost/style.css
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:159] Adding 0 URLs to the queue
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:10] [class-ss-page.php:118] Checking Content Identical:3955c7da5a1a8cf17644329a01aa4fb6bb9f9f4e===. Value: FALSE
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-json/
+[2024-08-17 10:54:10] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 18
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:79] Excludable found: URL: http://localhost/rednblue/wp-json/
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:89] Skipping URL because it is no-save and no-follow
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/xmlrpc.php
+[2024-08-17 10:54:10] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 18
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:79] Excludable found: URL: http://localhost/rednblue/xmlrpc.php
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:89] Skipping URL because it is no-save and no-follow
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-content/themes/frost/assets/fonts/Outfit-Variable.woff2
+[2024-08-17 10:54:10] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 18
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08152bf536-lyOTK7.tmp
+[2024-08-17 10:54:10] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/wp-content/themes/frost/assets/fonts/Outfit-Variable.woff2?simply_static_page=18
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/wp-content/themes/frost/assets/fonts/Outfit-Variable.woff2?simply_static_page=18
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:103] Filesize: 34596 bytes
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: font/woff2
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:233] New filename for static page: /wp-content/themes/frost/assets/fonts/Outfit-Variable.woff2
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08152bf536-lyOTK7.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/wp-content/themes/frost/assets/fonts/Outfit-Variable.woff2
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:159] Adding 0 URLs to the queue
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:10] [class-ss-page.php:118] Checking Content Identical:36ec9269ae7ea023a809fe925e090b81583694aa===. Value: FALSE
+[2024-08-17 10:54:10] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 8 of 18 pages/files
+[2024-08-17 10:54:10] [class-ss-archive-creation-job.php:181] We're not done with the fetch_urls task yet
+[2024-08-17 10:54:10] [class-ss-archive-creation-job.php:136] Current task: fetch_urls
+[2024-08-17 10:54:10] [class-ss-archive-creation-job.php:153] Performing task: fetch_urls
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:69] Total pages: 21; Pages remaining: 3
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue
+[2024-08-17 10:54:10] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 21
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08152ca283-bYuK0f.tmp
+[2024-08-17 10:54:10] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue?simply_static_page=19
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue?simply_static_page=19
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:103] Filesize: 355 bytes
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:119] http_status_code: 301 | content_type: text/html; charset=iso-8859-1
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:147] We weren't able to establish a filename; deleting temp file
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:204] redirect_url: http://localhost/rednblue/
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:213] This is a redirect to a trailing slashed version of the same page; adding new URL to the queue
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/2024/08/17/hello-world/
+[2024-08-17 10:54:10] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 21
+[2024-08-17 10:54:10] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08152d2d64-Ht4ZDY.tmp
+[2024-08-17 10:54:10] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/2024/08/17/hello-world/?simply_static_page=20
+[2024-08-17 10:54:10] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/2024/08/17/hello-world/?simply_static_page=20
+[2024-08-17 10:54:11] [class-ss-url-fetcher.php:103] Filesize: 52356 bytes
+[2024-08-17 10:54:11] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: text/html; charset=UTF-8
+[2024-08-17 10:54:11] [class-ss-url-fetcher.php:233] New filename for static page: /2024/08/17/hello-world/index.html
+[2024-08-17 10:54:11] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08152d2d64-Ht4ZDY.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/2024/08/17/hello-world/index.html
+[2024-08-17 10:54:11] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:11] [class-ss-fetch-urls-task.php:159] Adding 14 URLs to the queue
+[2024-08-17 10:54:11] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:11] [class-ss-page.php:118] Checking Content Identical:80f12e974c6a907881752dbe1bb5fba01e962311===. Value: FALSE
+[2024-08-17 10:54:11] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/2024/08/17/hello-world/feed/
+[2024-08-17 10:54:11] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 21
+[2024-08-17 10:54:11] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:11] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08153b34b7-06xGua.tmp
+[2024-08-17 10:54:11] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/2024/08/17/hello-world/feed/?simply_static_page=21
+[2024-08-17 10:54:11] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/2024/08/17/hello-world/feed/?simply_static_page=21
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:103] Filesize: 1683 bytes
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: application/rss+xml; charset=UTF-8
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:233] New filename for static page: /2024/08/17/hello-world/feed/index.xml
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08153b34b7-06xGua.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/2024/08/17/hello-world/feed/index.xml
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:159] Adding 3 URLs to the queue
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:12] [class-ss-page.php:118] Checking Content Identical:5c9bd43b582358b72a1b59f17d1b928d433b7e33===. Value: FALSE
+[2024-08-17 10:54:12] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 18 of 21 pages/files
+[2024-08-17 10:54:12] [class-ss-archive-creation-job.php:181] We're not done with the fetch_urls task yet
+[2024-08-17 10:54:12] [class-ss-archive-creation-job.php:136] Current task: fetch_urls
+[2024-08-17 10:54:12] [class-ss-archive-creation-job.php:153] Performing task: fetch_urls
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:69] Total pages: 26; Pages remaining: 5
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/author/admin/
+[2024-08-17 10:54:12] [class-ss-task.php:58] [PAGES STATUS] Remaining:5; Total: 26
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c0815422791-VxRfdR.tmp
+[2024-08-17 10:54:12] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/author/admin/?simply_static_page=22
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/author/admin/?simply_static_page=22
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:103] Filesize: 37984 bytes
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: text/html; charset=UTF-8
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:233] New filename for static page: /author/admin/index.html
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c0815422791-VxRfdR.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/author/admin/index.html
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:159] Adding 10 URLs to the queue
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:12] [class-ss-page.php:118] Checking Content Identical:376205d3032c3321431e606a0c163c5f2123c069===. Value: FALSE
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/category/uncategorized/
+[2024-08-17 10:54:12] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 26
+[2024-08-17 10:54:12] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08154ec66b-B3Czfo.tmp
+[2024-08-17 10:54:12] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/category/uncategorized/?simply_static_page=23
+[2024-08-17 10:54:12] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/category/uncategorized/?simply_static_page=23
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:103] Filesize: 38037 bytes
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: text/html; charset=UTF-8
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:233] New filename for static page: /category/uncategorized/index.html
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08154ec66b-B3Czfo.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/category/uncategorized/index.html
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:159] Adding 10 URLs to the queue
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:13] [class-ss-page.php:118] Checking Content Identical:f2498b33d6528291c12905051ff4169e480a6145===. Value: FALSE
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-includes/js/comment-reply.min.js
+[2024-08-17 10:54:13] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 26
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08155c10e1-cGxi8A.tmp
+[2024-08-17 10:54:13] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/wp-includes/js/comment-reply.min.js?simply_static_page=24
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/wp-includes/js/comment-reply.min.js?simply_static_page=24
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:103] Filesize: 2981 bytes
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: text/javascript
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:233] New filename for static page: /wp-includes/js/comment-reply.min.js
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08155c10e1-cGxi8A.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/wp-includes/js/comment-reply.min.js
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:159] Adding 0 URLs to the queue
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:13] [class-ss-page.php:118] Checking Content Identical:db36a77f6aaa2063bfbec02c2c0e967438c5a245===. Value: FALSE
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-json/wp/v2/posts/1
+[2024-08-17 10:54:13] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 26
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:79] Excludable found: URL: http://localhost/rednblue/wp-json/wp/v2/posts/1
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:89] Skipping URL because it is no-save and no-follow
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-json/oembed/1.0/embed
+[2024-08-17 10:54:13] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 26
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:79] Excludable found: URL: http://localhost/rednblue/wp-json/oembed/1.0/embed
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:89] Skipping URL because it is no-save and no-follow
+[2024-08-17 10:54:13] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 21 of 26 pages/files
+[2024-08-17 10:54:13] [class-ss-archive-creation-job.php:181] We're not done with the fetch_urls task yet
+[2024-08-17 10:54:13] [class-ss-archive-creation-job.php:136] Current task: fetch_urls
+[2024-08-17 10:54:13] [class-ss-archive-creation-job.php:153] Performing task: fetch_urls
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:69] Total pages: 30; Pages remaining: 4
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/author/admin/feed/
+[2024-08-17 10:54:13] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 30
+[2024-08-17 10:54:13] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c08155cf1e4-XnEDYw.tmp
+[2024-08-17 10:54:13] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/author/admin/feed/?simply_static_page=27
+[2024-08-17 10:54:13] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/author/admin/feed/?simply_static_page=27
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:103] Filesize: 1713 bytes
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: application/rss+xml; charset=UTF-8
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:233] New filename for static page: /author/admin/feed/index.xml
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c08155cf1e4-XnEDYw.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/author/admin/feed/index.xml
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:159] Adding 5 URLs to the queue
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:14] [class-ss-page.php:118] Checking Content Identical:113ddfc3aa69d4d3f88bd89f008ba97b58723774===. Value: FALSE
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-json/wp/v2/users/1
+[2024-08-17 10:54:14] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 30
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:79] Excludable found: URL: http://localhost/rednblue/wp-json/wp/v2/users/1
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:89] Skipping URL because it is no-save and no-follow
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/category/uncategorized/feed/
+[2024-08-17 10:54:14] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 30
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:83] URL is not being excluded
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c081563ecf7-esDju5.tmp
+[2024-08-17 10:54:14] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/category/uncategorized/feed/?simply_static_page=29
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/category/uncategorized/feed/?simply_static_page=29
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:103] Filesize: 1731 bytes
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:119] http_status_code: 200 | content_type: application/rss+xml; charset=UTF-8
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:233] New filename for static page: /category/uncategorized/feed/index.xml
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c081563ecf7-esDju5.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047/category/uncategorized/feed/index.xml
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:152] Extracting URLs and replacing URLs in the static file
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:159] Adding 5 URLs to the queue
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:170] We're saving this URL; keeping the static file
+[2024-08-17 10:54:14] [class-ss-page.php:118] Checking Content Identical:a1909034ed87e903a8abfa11f52d087ccb768f9b===. Value: FALSE
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:72] URL: http://localhost/rednblue/wp-json/wp/v2/categories/1
+[2024-08-17 10:54:14] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 30
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:79] Excludable found: URL: http://localhost/rednblue/wp-json/wp/v2/categories/1
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:89] Skipping URL because it is no-save and no-follow
+[2024-08-17 10:54:14] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 26 of 30 pages/files
+[2024-08-17 10:54:14] [class-ss-archive-creation-job.php:181] We're not done with the fetch_urls task yet
+[2024-08-17 10:54:14] [class-ss-archive-creation-job.php:136] Current task: fetch_urls
+[2024-08-17 10:54:14] [class-ss-archive-creation-job.php:153] Performing task: fetch_urls
+[2024-08-17 10:54:14] [class-ss-fetch-urls-task.php:69] Total pages: 30; Pages remaining: 0
+[2024-08-17 10:54:14] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 30 of 30 pages/files
+[2024-08-17 10:54:14] [class-ss-archive-creation-job.php:175] We've found our next task: generate_404
+[2024-08-17 10:54:14] [class-ss-archive-creation-job.php:136] Current task: generate_404
+[2024-08-17 10:54:14] [class-ss-archive-creation-job.php:153] Performing task: generate_404
+[2024-08-17 10:54:14] [class-ss-task.php:44] Status message: [generate_404] Generating 404 Page.
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:94] Fetching URL and saving it to: C:\Users\Asus\AppData\Local\Temp/66c081569ecdd-MYwZff.tmp
+[2024-08-17 10:54:14] [class-ss-page-handler.php:38] URL Prepared:http://localhost/rednblue/1723892055?simply_static_page=0
+[2024-08-17 10:54:14] [class-ss-url-fetcher.php:251] Fetching URL: http://localhost/rednblue/1723892055?simply_static_page=0
+[2024-08-17 10:54:15] [class-ss-url-fetcher.php:103] Filesize: 35609 bytes
+[2024-08-17 10:54:15] [class-ss-url-fetcher.php:119] http_status_code: 404 | content_type: text/html; charset=UTF-8
+[2024-08-17 10:54:15] [class-ss-url-fetcher.php:233] New filename for static page: 404/index.html
+[2024-08-17 10:54:15] [class-ss-url-fetcher.php:143] Renaming temp file from C:\Users\Asus\AppData\Local\Temp/66c081569ecdd-MYwZff.tmp to C:\xampp\htdocs\rednblue/wp-content/uploads\simply-static\temp-files/simply-static-1-1723892047\404/index.html
+[2024-08-17 10:54:15] [class-ss-generate-404-task.php:119] Replacing URLs in the static file
+[2024-08-17 10:54:15] [class-ss-generate-404-task.php:125] We're saving this URL; keeping the static file
+[2024-08-17 10:54:15] [class-ss-page.php:118] Checking Content Identical:b78a76b19c100e49b0bb9846e2ae2dbcb33af32a===. Value: FALSE
+[2024-08-17 10:54:15] [class-ss-task.php:44] Status message: [generate_404] 404 Page generated
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:175] We've found our next task: transfer_files_locally
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:136] Current task: transfer_files_locally
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:153] Performing task: transfer_files_locally
+[2024-08-17 10:54:15] [class-ss-task.php:44] Status message: [transfer_files_locally] Transferring 15 of 15 files
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/wp-content/uploads/2024/08
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/feed
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/comments/feed
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/wp-content/themes/frost
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/wp-content/themes/frost/assets/fonts
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/2024/08/17/hello-world
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/2024/08/17/hello-world/feed
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/author/admin
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/category/uncategorized
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/wp-includes/js
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/author/admin/feed
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:102] Trying to transfer: C:/xampp/htdocs/rednblue/category/uncategorized/feed
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:73] [Transfer] Total Pages:15. Processed Pages: 15
+[2024-08-17 10:54:15] [class-ss-task.php:44] Status message: [transfer_files_locally] Transferred 15 of 15 files
+[2024-08-17 10:54:15] [trait-can-process-pages.php:103] Total pages: 15; Pages remaining: 0
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:238] Transferring 404 Page
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:257] Destination 404 Page found at C:\xampp\htdocs\rednblue\404\index.html
+[2024-08-17 10:54:15] [class-ss-transfer-files-locally-task.php:261] Success
+[2024-08-17 10:54:15] [class-ss-task.php:44] Status message: [destination_url] Destination URL: <a href="https://jerielnino.github.io/rednblue/" target="_blank">https://jerielnino.github.io/rednblue/</a>
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:175] We've found our next task: wrapup
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:136] Current task: wrapup
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:153] Performing task: wrapup
+[2024-08-17 10:54:15] [class-ss-wrapup-task.php:22] Deleting temporary files
+[2024-08-17 10:54:15] [class-ss-task.php:44] Status message: [wrapup] Wrapping up
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:170] This task is done and there are no more tasks, time to complete the job
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:197] Completing the job
+[2024-08-17 10:54:15] [class-ss-archive-creation-job.php:324] Status message: [done] Done! Finished in 00:00:08
