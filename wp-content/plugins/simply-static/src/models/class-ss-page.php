@@ -46,7 +46,7 @@ class Page extends Model {
 		'error_message'       => 'VARCHAR(255) NULL',
 		'status_message'      => 'VARCHAR(255) NULL',
 		'handler'             => 'VARCHAR(255) NULL',
-		'json'                => 'JSON NULL',
+		'json'                => 'TEXT NULL',
 		'last_checked_at'     => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
 		'last_modified_at'    => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
 		'last_transferred_at' => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
@@ -104,6 +104,15 @@ class Page extends Model {
 	 */
 	public function parent_static_page() {
 		return self::query()->find_by( 'id', $this->found_on_id );
+	}
+
+	/**
+	 * Delete this page.
+	 *
+	 * @return int|null
+	 */
+	public function delete() {
+		return self::query()->delete_by_id( $this->id );
 	}
 
 	/**
@@ -172,11 +181,33 @@ class Page extends Model {
 	 * @param string $message The status message.
 	 */
 	public function set_status_message( $message ) {
+		// Already has the same message.
+		if ( $this->has_status_message( $message ) ) {
+			return;
+		}
+
 		if ( $this->status_message ) {
 			$this->status_message = $this->status_message . '; ' . $message;
 		} else {
 			$this->status_message = $message;
 		}
+	}
+
+	/**
+	 * Check if the page already has a specific status message
+	 *
+	 * @param string $message The status message to check for.
+	 * @return boolean Whether the page already has the status message.
+	 */
+	protected function has_status_message( $message ) {
+		if ( ! $this->status_message ) {
+			return false;
+		}
+
+		$statuses = explode( '; ', $this->status_message );
+		$index  = array_search( $message, $statuses, true );
+
+		return false !== $index && $index >= 0;
 	}
 
 	/**
@@ -187,7 +218,11 @@ class Page extends Model {
 	 * @return boolean
 	 */
 	public function is_type( $content_type ) {
-		return stripos( $this->content_type, $content_type ) !== false;
+		if ( ! is_null( $this->content_type ) ) {
+			return stripos( $this->content_type, $content_type ) !== false;
+		}
+
+		return false;
 	}
 
 	/**
@@ -196,7 +231,19 @@ class Page extends Model {
 	 * @return bool
 	 */
 	public function is_binary_file() {
-		return $this->is_type( 'application/octet-stream' ) || $this->is_type( 'image' );
+		if ( $this->is_type( 'application/octet-stream' ) ) {
+			return true;
+		}
+
+		if ( $this->is_type( 'image' ) ) {
+			return true;
+		}
+
+		if ( null === $this->content_type && $this->get_handler_class() === Additional_File_Handler::class ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public function get_handler_class() {
@@ -283,7 +330,7 @@ class Page extends Model {
 	 * Set the JSON data for a key.
 	 *
 	 * @param string $key Key under which sets the data.
-	 * @param mixed  $data Mixed data.
+	 * @param mixed $data Mixed data.
 	 *
 	 * @return void
 	 */

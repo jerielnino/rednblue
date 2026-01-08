@@ -50,12 +50,13 @@ class Fetch_Urls_Task extends Task {
 			'ss_static_pages',
 			Page::query()
 			    ->where( 'last_checked_at < ? OR last_checked_at IS NULL', $this->archive_start_time )
-			    ->limit( $batch_size )
-			    ->find(),
+				->limit( $batch_size )
+				->find(),
 			$this->archive_start_time
 		);
 
-		$pages_remaining = apply_filters(
+		// Compute remaining and total using the dedicated filters so Single/Build exports report correctly
+		$pages_remaining = (int) apply_filters(
 			'ss_remaining_pages',
 			Page::query()
 			    ->where( 'last_checked_at < ? OR last_checked_at IS NULL', $this->archive_start_time )
@@ -63,14 +64,22 @@ class Fetch_Urls_Task extends Task {
 			$this->archive_start_time
 		);
 
-		$total_pages = apply_filters( 'ss_total_pages', Page::query()->count() );
+		$total_pages = (int) apply_filters( 'ss_total_pages', Page::query()->count() );
 
+		// Note: We will recalculate these values again after processing this batch so the
+		// status message always reflects the latest progress.
 		$pages_processed = $total_pages - $pages_remaining;
 		Util::debug_log( "Total pages: " . $total_pages . '; Pages remaining: ' . $pages_remaining );
 
+		// Track remaining pages locally so we can update progress accurately without extra DB queries.
+		$remaining_counter = (int) $pages_remaining;
+
 		while ( $static_page = array_shift( $static_pages ) ) {
+			$this->check_if_running();
 			Util::debug_log( "URL: " . $static_page->url );
-			$this->save_pages_status( count( $static_pages ) + 1, intval( $total_pages ) );
+			$this->save_pages_status( $remaining_counter, (int) $total_pages );
+			// Decrement after scheduling processing of this page.
+			$remaining_counter = max( 0, $remaining_counter - 1 );
 
 			$excludable = apply_filters( 'ss_find_excludable', $this->find_excludable( $static_page ), $static_page );
 			if ( $excludable !== false ) {
@@ -125,12 +134,22 @@ class Fetch_Urls_Task extends Task {
 
 		}
 
+		// Recalculate progress after processing this batch to avoid stale counters.
+		$pages_remaining = (int) apply_filters(
+			'ss_remaining_pages',
+			Page::query()
+		        ->where( 'last_checked_at < ? OR last_checked_at IS NULL', $this->archive_start_time )
+		        ->count(),
+			$this->archive_start_time
+		);
+		$total_pages = (int) apply_filters( 'ss_total_pages', Page::query()->count() );
+		$pages_processed = $total_pages - $pages_remaining;
+
 		$message = sprintf( __( "Fetched %d of %d pages/files", 'simply-static' ), $pages_processed, $total_pages );
 		$this->save_status_message( $message );
 
-		// if we haven't processed any additional pages, we're done.
+		// If we've processed all pages for this export, signal completion of this task.
 		if ( $pages_remaining == 0 ) {
-			$this->add_feed_redirect();
 			do_action( 'ss_finished_fetching_pages' );
 		}
 
@@ -199,7 +218,20 @@ class Fetch_Urls_Task extends Task {
 		$origin_url      = Util::origin_url();
 		$destination_url = $this->options->get_destination_url();
 		$current_url     = $static_page->url;
-		$redirect_url    = remove_query_arg( 'simply_static_page', $static_page->redirect_url );
+
+		// Remove simply_static_page parameter from the redirect URL
+		$redirect_url = $static_page->redirect_url;
+
+		// First try standard removal for normal query parameters
+		$redirect_url = remove_query_arg( 'simply_static_page', $redirect_url );
+
+		// Also handle cases where simply_static_page is embedded in another parameter
+		// Look for patterns like %3Fsimply_static_page%3D12345 (URL-encoded ?simply_static_page=12345)
+		$redirect_url = preg_replace( '/%3Fsimply_static_page%3D\d+/i', '', $redirect_url );
+
+		// Handle standard query string formats
+		$redirect_url = preg_replace( '/\?simply_static_page=\d+/i', '', $redirect_url );
+		$redirect_url = preg_replace( '/&simply_static_page=\d+/i', '', $redirect_url );
 
 		Util::debug_log( "redirect_url: " . $redirect_url );
 
@@ -235,7 +267,10 @@ class Fetch_Urls_Task extends Task {
 						$static_page->set_status_message( __( "Do not follow", 'simply-static' ) );
 					}
 					// and update the URL
-					$redirect_url = str_replace( $origin_url, $destination_url, $redirect_url );
+					// Replace origin host (any scheme) with the configured destination URL to ensure
+					// redirects point to the static site domain even when schemes differ (http/https).
+					$pattern      = '/^(https?:)?\/\/' . addcslashes( Util::origin_host(), '/' ) . '/i';
+					$redirect_url = preg_replace( $pattern, $destination_url, $redirect_url );
 
 				}
 
@@ -278,16 +313,50 @@ class Fetch_Urls_Task extends Task {
 	 *
 	 * @return bool
 	 */
-	public function find_excludable( $static_page ) {
-		$excluded = apply_filters( 'ss_excluded_by_default', array( 'wp-json.php', 'wp-login.php', 'xmlrpc.php' ) );
+ public function find_excludable( $static_page ) {
+ 		// Delegate exclusion decision to central utility for consistency with crawlers
+ 		if ( \Simply_Static\Util::is_url_excluded( $static_page->url ) ) {
+ 			return true;
+ 		}
+		$excluded = array( '.php' );
+		$url = $static_page->url;
+
+		// Exclude debug files (.log, .txt) but not robots.txt
+		if ( preg_match( '/\.(log|txt)$/i', $url ) && strpos( $url, 'debug' ) !== false && strpos( $url, 'robots.txt' ) === false ) {
+			return true;
+		}
+
+		// Exclude feeds if add_feeds is not true.
+		if ( ! $this->options->get( 'add_feeds' ) ) {
+			// Only exclude WordPress XML feeds (ending with /feed/ or ?feed= parameter)
+			if ( preg_match( '/(\/feed\/?$|\?feed=|\/feed\/|\/rss\/?$|\/atom\/?$)/i', $url ) ) {
+				return true;
+			}
+		}
+
+		// Exclude Rest API if add_rest_api is not true.
+		if ( ! $this->options->get( 'add_rest_api' ) ) {
+			$excluded[] = 'wp-json';
+		}
 
 		if ( ! empty( $this->options->get( 'urls_to_exclude' ) ) ) {
-			$excluded_by_option = explode( "\n", $this->options->get( 'urls_to_exclude' ) );
+			if ( is_array( $this->options->get( 'urls_to_exclude' ) ) ) {
+				$excluded_by_option = wp_list_pluck( $this->options->get( 'urls_to_exclude' ), 'url' );
+			} else {
+				$excluded_by_option = explode( "\n", $this->options->get( 'urls_to_exclude' ) );
+			}
 
 			if ( is_array( $excluded_by_option ) ) {
 				$excluded = array_merge( $excluded, $excluded_by_option );
 			}
+
 		}
+
+		if ( apply_filters( 'simply_static_exclude_temp_dir', true ) ) {
+			$excluded[] = Util::get_temp_dir_url();
+		}
+
+		$excluded = apply_filters( 'ss_excluded_by_default', $excluded );
 
 		if ( $excluded ) {
 			$excluded = array_filter( $excluded );
@@ -295,8 +364,6 @@ class Fetch_Urls_Task extends Task {
 
 		if ( ! empty( $excluded ) ) {
 			foreach ( $excluded as $excludable ) {
-				$url = $static_page->url;
-
 				if ( strpos( $url, $excludable ) !== false ) {
 					return true;
 				}
@@ -320,6 +387,25 @@ class Fetch_Urls_Task extends Task {
 	 * @return void
 	 */
 	public function set_url_found_on( $static_page, $child_url ) {
+		// Skip adding the selected custom 404 page as a regular page
+		$exclude_url = '';
+		if ( $this->options->get( 'generate_404' ) && (int) $this->options->get( 'custom_404_page' ) ) {
+			$permalink = get_permalink( (int) $this->options->get( 'custom_404_page' ) );
+			if ( $permalink ) {
+				$exclude_url = untrailingslashit( $permalink );
+			}
+		}
+		if ( ! empty( $exclude_url ) && 0 === strcasecmp( untrailingslashit( $child_url ), $exclude_url ) ) {
+			Util::debug_log( sprintf( 'Skipping link-follow to custom 404 page URL "%s"', $child_url ) );
+			return;
+		}
+
+		// Do not add excluded URLs to the database at all
+		if ( Util::is_url_excluded( $child_url ) ) {
+			Util::debug_log( sprintf( 'Skipping excluded child URL: %s', $child_url ) );
+			return;
+		}
+
 		$child_static_page = Page::query()->find_or_create_by( 'url', $child_url );
 		if ( $child_static_page->found_on_id === null || $child_static_page->updated_at < $this->archive_start_time ) {
 			$child_static_page->found_on_id = $static_page->id;
@@ -361,34 +447,5 @@ class Fetch_Urls_Task extends Task {
 		} else {
 			return null;
 		}
-	}
-
-	/**
-	 * Add a redirect for the feed.
-	 *
-	 * @param $archive_dir
-	 *
-	 * @return void
-	 */
-	public function add_feed_redirect() {
-		$feed_dir             = $this->archive_dir . '/feed';
-		$feed_index_html_file = trailingslashit( $feed_dir ) . 'index.html';
-
-		// Create index.html file
-		file_put_contents( $feed_index_html_file,
-	'<!DOCTYPE html>
-			<html>
-				<head>
-					<title>Redirecting...</title>
-					<meta http-equiv="refresh" content="0;url=index.xml">
-				</head>
-				<body>
-					<script type="text/javascript">
-						window.location = "index.xml";
-					</script>
-					<p>You are being redirected to <a href="index.xml">index.xml</a></p>
-				</body>
-			</html>'
-		);
 	}
 }

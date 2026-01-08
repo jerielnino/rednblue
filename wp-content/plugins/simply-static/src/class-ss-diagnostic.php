@@ -50,13 +50,15 @@ class Diagnostic {
 
 		$this->checks = array(
 			'URLs'       => array(),
-			'PHP'        => array(
-				__( 'VERSION', 'simply-static' ) => $this->php_version(),
-				__( 'php-xml', 'simply-static' ) => $this->is_xml_active(),
-				__( 'cURL', 'simply-static' )    => $this->has_curl(),
+			'Server'     => array(
+				__( 'PHP Version', 'simply-static' ) => $this->php_version(),
+				__( 'Basic Auth', 'simply-static' )  => $this->check_basic_auth_status(),
+				__( 'php-xml', 'simply-static' )     => $this->is_xml_active(),
+				__( 'cURL', 'simply-static' )        => $this->has_curl(),
 			),
 			'WordPress'  => array(
 				__( 'Permalinks', 'simply-static' ) => $this->is_permalink_structure_set(),
+				__( 'Indexable', 'simply-static' )  => $this->is_set_to_index(),
 				__( 'Caching', 'simply-static' )    => $this->is_cache_set(),
 				__( 'WP-CRON', 'simply-static' )    => $this->is_wp_cron_running(),
 			),
@@ -101,7 +103,7 @@ class Diagnostic {
 
 		// Check for incompatible plugins.
 		$plugins           = get_plugins();
-		$active_plugins    = get_option( 'active_plugins' );
+		$active_plugins    = Util::get_all_active_plugins();
 		$plugin_count      = 0;
 		$activated_plugins = array();
 
@@ -130,7 +132,7 @@ class Diagnostic {
 
 		// Set transient for checks.
 		if ( ! get_transient( 'simply_static_checks' ) ) {
-			set_transient( 'simply_static_checks', $this->checks, MINUTE_IN_SECONDS );
+			set_transient( 'simply_static_checks', $this->checks, 5 * MINUTE_IN_SECONDS );
 		}
 
 		// Set transient for failed tests.
@@ -144,7 +146,7 @@ class Diagnostic {
 					}
 				}
 			}
-			set_transient( 'simply_static_failed_tests', $failed_tests, MINUTE_IN_SECONDS );
+			set_transient( 'simply_static_failed_tests', $failed_tests, 5 * MINUTE_IN_SECONDS );
 		}
 	}
 
@@ -202,8 +204,18 @@ class Diagnostic {
 		);
 	}
 
+	public function is_set_to_index() {
+		return array(
+			'test'        => get_option( 'blog_public' ) === '1',
+			'description' => __( 'Discourage search engines from indexing this site is disabled', 'simply-static' ),
+			'error'       => __( 'Discourage search engines from indexing this site is enabled', 'simply-static' ),
+		);
+	}
+
 	public function is_wp_cron_running() {
-		if ( ! defined( 'DISABLE_WP_CRON' ) || DISABLE_WP_CRON !== true || defined( 'SS_CRON' ) ) {
+		$server_cron = $this->options->get( 'server_cron' );
+
+		if ( ! defined( 'DISABLE_WP_CRON' ) || DISABLE_WP_CRON !== true || defined( 'SS_CRON' ) || $server_cron ) {
 			$is_cron = true;
 		} else {
 			$is_cron = false;
@@ -331,7 +343,6 @@ class Diagnostic {
 			'booking-system',
 			'yet-another-stars-rating',
 			'mailpoet',
-			'the-events-calendar',
 			'buddypress',
 			'lifterlms',
 			'wp-job-manager',
@@ -347,7 +358,6 @@ class Diagnostic {
 			'paid-memberships-pro',
 			'wp-members',
 			'wp-private-content-plus',
-			'forminator',
 			'catch-infinite-scroll',
 			'ultimate-post',
 			'facetwp',
@@ -387,7 +397,7 @@ class Diagnostic {
 	}
 
 	public function is_temp_files_dir_readable() {
-		$temp_files_dir = $this->options->get( 'temp_files_dir' );
+		$temp_files_dir = Util::get_temp_dir();
 
 		return array(
 			'test'        => is_readable( $temp_files_dir ),
@@ -397,7 +407,7 @@ class Diagnostic {
 	}
 
 	public function is_temp_files_dir_writeable() {
-		$temp_files_dir = $this->options->get( 'temp_files_dir' );
+		$temp_files_dir = Util::get_temp_dir();
 
 		return array(
 			'test'        => is_writable( $temp_files_dir ),
@@ -492,6 +502,52 @@ class Diagnostic {
 			'test'        => $test,
 			'description' => __( 'cURL is available', 'simply-static' ),
 			'error'       => sprintf( __( 'cURL version < %s', 'simply-static' ), self::$min_version['curl'] )
+		);
+	}
+
+	public function check_basic_auth_status() {
+		$test    = true;
+		$message = __( 'Basic Auth is not enabled.', 'simply-static' );
+
+		// Determine server type for basic auth check.
+		$server_type   = esc_html( $_SERVER['SERVER_SOFTWARE'] );
+		$basic_auth_on = false;
+
+		switch ( $server_type ) {
+			case ( strpos( $server_type, 'Apache' ) !== false ) :
+				if ( isset( $_SERVER['PHP_AUTH_USER'] ) && ! empty( $_SERVER['PHP_AUTH_USER'] ) ) {
+					$basic_auth_on = true;
+				}
+				break;
+			case ( strpos( $server_type, 'nginx' ) !== false ) :
+				if ( isset( $_SERVER['REMOTE_USER'] ) && ! empty( $_SERVER['REMOTE_USER'] ) ) {
+					$basic_auth_on = true;
+				}
+				break;
+			case ( strpos( $server_type, 'IIS' ) !== false ) :
+				if ( isset( $_SERVER['AUTH_USER'] ) && ! empty( $_SERVER['AUTH_USER'] ) ) {
+					$basic_auth_on = true;
+				}
+				break;
+		}
+
+		// Check for NGINX, Apache, and IIS basic auth.
+		if ( $basic_auth_on ) {
+			$basic_auth_user = $this->options->get( 'http_basic_auth_username' );
+			$basic_auth_pass = $this->options->get( 'http_basic_auth_password' );
+
+			if ( empty( $basic_auth_user ) && empty( $basic_auth_pass ) ) {
+				$test    = false;
+				$message = __( 'Basic Auth is enabled, but no username or password is set in Simply Static -> Settings -> Debug -> Basic Auth', 'simply-static' );
+			} else {
+				$message = __( 'Basic Auth is enabled, and username and password are set in Simply Static -> Settings -> Debug -> Basic Auth', 'simply-static' );
+			}
+		}
+
+		return array(
+			'test'        => $test,
+			'description' => $message,
+			'error'       => $message
 		);
 	}
 

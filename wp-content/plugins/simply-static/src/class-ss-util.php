@@ -12,6 +12,543 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Util {
 
+    /**
+     * Return a filterable list of admin-only plugin directory slugs to always exclude
+     * from Enhanced Crawl "Plugins to Include" selections and auto-include logic.
+     *
+     * This centralizes the defaults and mirrors previous lists used in Admin REST and Plugin.
+     *
+     * Filter: `ss_admin_only_plugins` allows adding/removing slugs.
+     *
+     * @return string[] Array of sanitized, unique plugin directory slugs.
+     */
+    public static function get_admin_only_plugins(): array {
+        $defaults = array(
+            'advanced-custom-fields',
+            'secure-custom-fields',
+            'query-monitor',
+            'debug-bar',
+            'health-check',
+            'user-switching',
+            'wp-crontrol',
+            'theme-check',
+            'regenerate-thumbnails',
+            'wp-migrate-db',
+            'wp-migrate-db-pro',
+            'wp-staging',
+            'wp-staging-pro',
+            'rollback',
+            'wp-rollback',
+            'classic-editor',
+            'artiss-transient-cleaner',
+            'updraftplus',
+            'user-switchting',
+            'view-admin-as',
+            'wp-beta-tester',
+            'wp-downgrade',
+            'wp-rest-cache',
+            'wp-reset',
+            'wpvidid-backuprestore',
+            'duplicate-post',
+        );
+
+        /**
+         * Filter the list of admin-only plugin slugs that should be excluded from Enhanced Crawl.
+         *
+         * @param string[] $defaults Directory slugs of admin-only plugins.
+         */
+        $list = apply_filters( 'ss_admin_only_plugins', $defaults );
+
+        if ( ! is_array( $list ) ) {
+            $list = $defaults;
+        }
+        // Sanitize and de-duplicate.
+        $list = array_map( 'sanitize_title', array_filter( array_map( 'strval', $list ) ) );
+
+        return array_values( array_unique( $list ) );
+    }
+
+    /**
+     * Derive a plugin directory slug from a plugin path like akismet/akismet.php.
+     * Returns an empty string if it cannot be derived.
+     *
+     * @param string $plugin_path
+     * @return string
+     */
+    public static function plugin_slug_from_path( string $plugin_path ): string {
+        $dir = trim( dirname( (string) $plugin_path ), '/' );
+        if ( $dir === '' || $dir === '.' ) {
+            return '';
+        }
+        return sanitize_title( $dir );
+    }
+
+    /**
+     * Append a plugin slug to Enhanced Crawl's "Plugins to Include" list and persist.
+     * De-duplicates and sanitizes slugs.
+     *
+     * @param string $slug Plugin directory slug
+     * @return void
+     */
+    public static function add_plugin_to_enhanced_crawl( string $slug ): void {
+        $slug    = sanitize_title( $slug );
+        $options = get_option( 'simply-static' );
+        if ( ! is_array( $options ) ) {
+            $options = array();
+        }
+        $current = array();
+        if ( isset( $options['plugins_to_include'] ) && is_array( $options['plugins_to_include'] ) ) {
+            $current = array_map( 'strval', $options['plugins_to_include'] );
+        }
+        if ( $slug !== '' ) {
+            $current[] = $slug;
+        }
+        $options['plugins_to_include'] = array_values( array_unique( array_map( 'sanitize_title', $current ) ) );
+        update_option( 'simply-static', $options );
+    }
+
+    /**
+     * Remove a plugin slug from Enhanced Crawl's "Plugins to Include" list and persist.
+     *
+     * @param string $slug Plugin directory slug
+     * @return void
+     */
+    public static function remove_plugin_from_enhanced_crawl( string $slug ): void {
+        $options = get_option( 'simply-static' );
+        if ( ! is_array( $options ) ) {
+            $options = array();
+        }
+        $current = array();
+        if ( isset( $options['plugins_to_include'] ) && is_array( $options['plugins_to_include'] ) ) {
+            $current = array_map( 'strval', $options['plugins_to_include'] );
+        }
+        $slug     = sanitize_title( (string) $slug );
+        $filtered = array();
+        foreach ( $current as $item ) {
+            if ( sanitize_title( $item ) !== $slug ) {
+                $filtered[] = $item;
+            }
+        }
+        $options['plugins_to_include'] = array_values( array_unique( array_map( 'sanitize_title', $filtered ) ) );
+        update_option( 'simply-static', $options );
+    }
+
+    /**
+     * Return the active theme slugs: child (stylesheet) and parent (template) if different.
+     *
+     * @return string[]
+     */
+    public static function active_theme_slugs(): array {
+        $theme = function_exists( 'wp_get_theme' ) ? wp_get_theme() : null;
+        if ( ! $theme || ! $theme->exists() ) {
+            return array();
+        }
+        $slugs = array();
+        $stylesheet = $theme->get_stylesheet();
+        if ( ! empty( $stylesheet ) ) {
+            $slugs[] = sanitize_title( $stylesheet );
+        }
+        $template = $theme->get_template();
+        if ( ! empty( $template ) ) {
+            $slugs[] = sanitize_title( $template );
+        }
+        return array_values( array_unique( $slugs ) );
+    }
+
+    /**
+     * Append one or more theme slugs to Enhanced Crawl's "Themes to Include" list and persist.
+     *
+     * @param string[] $slugs
+     * @return void
+     */
+    public static function add_themes_to_enhanced_crawl( array $slugs ): void {
+        $options = get_option( 'simply-static' );
+        if ( ! is_array( $options ) ) {
+            $options = array();
+        }
+        $current = array();
+        if ( isset( $options['themes_to_include'] ) && is_array( $options['themes_to_include'] ) ) {
+            $current = array_map( 'strval', $options['themes_to_include'] );
+        }
+        foreach ( $slugs as $slug ) {
+            $slug = sanitize_title( (string) $slug );
+            if ( $slug !== '' ) {
+                $current[] = $slug;
+            }
+        }
+        $options['themes_to_include'] = array_values( array_unique( array_map( 'sanitize_title', $current ) ) );
+        update_option( 'simply-static', $options );
+    }
+
+    /**
+     * Automatically remove a deactivated plugin from Enhanced Crawl's "Plugins to Include" list.
+     *
+     * Hook callback for `deactivated_plugin`.
+     *
+     * Filters used:
+     * - `ss_auto_remove_on_deactivation` (bool) Gate entire behavior (default true).
+     *
+     * @param string $plugin               Relative plugin path like akismet/akismet.php
+     * @param bool   $network_deactivating True if network-deactivated on multisite
+     * @return void
+     */
+    public static function maybe_auto_remove_deactivated_plugin( $plugin, $network_deactivating ): void {
+        $enabled = apply_filters( 'ss_auto_remove_on_deactivation', true );
+        if ( ! $enabled ) {
+            return;
+        }
+
+        $slug = self::plugin_slug_from_path( (string) $plugin );
+        if ( '' === $slug ) {
+            return;
+        }
+
+        if ( is_multisite() && $network_deactivating ) {
+            $sites = function_exists( 'get_sites' ) ? get_sites( array( 'fields' => 'ids' ) ) : array();
+            if ( is_array( $sites ) ) {
+                foreach ( $sites as $blog_id ) {
+                    switch_to_blog( (int) $blog_id );
+                    self::remove_plugin_from_enhanced_crawl( $slug );
+                    restore_current_blog();
+                }
+            }
+            return;
+        }
+
+        self::remove_plugin_from_enhanced_crawl( $slug );
+    }
+
+    /**
+     * Include the currently active theme (and parent, if child theme is used) into
+     * Enhanced Crawl's "Themes to Include" list whenever the theme is switched.
+     *
+     * Hook callback for `after_switch_theme`.
+     *
+     * Filters used:
+     * - `ss_auto_include_themes_on_switch` (bool) Control if this runs (default true).
+     * - `ss_auto_include_skip_themes` (string[]) Theme slugs to skip.
+     *
+     * @param mixed ...$args Ignored. Present for compatibility with WP action parameters.
+     * @return void
+     */
+    public static function maybe_auto_include_active_theme( ...$args ): void {
+        $enabled = apply_filters( 'ss_auto_include_themes_on_switch', true );
+        if ( ! $enabled ) {
+            return;
+        }
+        $slugs = self::active_theme_slugs();
+
+        $skip = apply_filters( 'ss_auto_include_skip_themes', array() );
+        if ( ! is_array( $skip ) ) {
+            $skip = array();
+        }
+        $skip  = array_map( 'sanitize_title', array_filter( array_map( 'strval', $skip ) ) );
+        $slugs = array_values( array_diff( $slugs, $skip ) );
+        if ( empty( $slugs ) ) {
+            return;
+        }
+
+        self::add_themes_to_enhanced_crawl( $slugs );
+    }
+
+    /**
+     * Automatically add an activated plugin to Enhanced Crawl's "Plugins to Include" list.
+     *
+     * Hook callback for `activated_plugin`. Kept here to avoid bloating Plugin class.
+     *
+     * Filters used:
+     * - `ss_auto_include_on_activation` (bool) Gate entire behavior (default true).
+     * - `ss_auto_include_skip_plugins` (string[]) Additional plugin slugs to skip.
+     * - `ss_admin_only_plugins` (string[]) Centralized admin-only list.
+     * - `ss_auto_include_self_slugs` (string[]) Defaults to ['simply-static','simply-static-pro'].
+     * - `ss_auto_include_debug` (bool) Enable error_log debug lines.
+     *
+     * @param string $plugin        Relative plugin path like akismet/akismet.php
+     * @param bool   $network_wide  True if network-activated on multisite
+     * @return void
+     */
+    public static function maybe_auto_include_activated_plugin( $plugin, $network_wide ): void {
+        // Allow disabling globally.
+        $enabled = apply_filters( 'ss_auto_include_on_activation', true );
+        if ( ! $enabled ) {
+            return;
+        }
+
+        // Derive the plugin directory slug.
+        $slug = self::plugin_slug_from_path( (string) $plugin );
+        if ( '' === $slug ) {
+            return;
+        }
+        $slug_lc = strtolower( $slug );
+
+        // Exclusion lists: admin-only, custom, and self slugs.
+        $admin_only_list = self::get_admin_only_plugins();
+        $admin_only_lc   = array_map( 'strtolower', array_map( 'strval', (array) $admin_only_list ) );
+
+        $custom_skips = apply_filters( 'ss_auto_include_skip_plugins', array() );
+        if ( ! is_array( $custom_skips ) ) {
+            $custom_skips = array();
+        }
+        $custom_skips_lc = array_map( 'strtolower', array_map( 'sanitize_title', array_filter( array_map( 'strval', $custom_skips ) ) ) );
+
+        $self_defaults = array( 'simply-static', 'simply-static-pro' );
+        $self_slugs    = apply_filters( 'ss_auto_include_self_slugs', $self_defaults );
+        if ( ! is_array( $self_slugs ) ) {
+            $self_slugs = $self_defaults;
+        }
+        $self_slugs_lc = array_map( 'strtolower', array_map( 'sanitize_title', array_filter( array_map( 'strval', $self_slugs ) ) ) );
+
+        $skip_lc = array_values( array_unique( array_merge( $admin_only_lc, $custom_skips_lc, $self_slugs_lc ) ) );
+        if ( in_array( $slug_lc, $skip_lc, true ) ) {
+            if ( apply_filters( 'ss_auto_include_debug', false ) ) {
+                error_log( sprintf( '[Simply Static] Auto-include skipped for plugin "%s" (in skip list).', $slug ) );
+            }
+            return;
+        }
+
+        if ( is_multisite() && $network_wide ) {
+            $sites = function_exists( 'get_sites' ) ? get_sites( array( 'fields' => 'ids' ) ) : array();
+            if ( is_array( $sites ) ) {
+                foreach ( $sites as $blog_id ) {
+                    switch_to_blog( (int) $blog_id );
+                    self::add_plugin_to_enhanced_crawl( $slug );
+                    restore_current_blog();
+                }
+            }
+            if ( apply_filters( 'ss_auto_include_debug', false ) ) {
+                error_log( sprintf( '[Simply Static] Auto-included plugin "%s" for %d site(s) via network activation.', $slug, is_array( $sites ) ? count( $sites ) : 0 ) );
+            }
+            return;
+        }
+
+        // Single site or per-site activation.
+        self::add_plugin_to_enhanced_crawl( $slug );
+        if ( apply_filters( 'ss_auto_include_debug', false ) ) {
+            error_log( sprintf( '[Simply Static] Auto-included plugin "%s" on this site.', $slug ) );
+        }
+    }
+
+	/**
+	 * Parse a list of user-provided lines into literals and regex patterns.
+	 * Lines wrapped like /pattern/flags are treated as regex; others as literals.
+	 *
+	 * @param array $lines
+	 * @return array{literals: string[], regex: string[]}
+	 */
+	public static function parse_patterns( array $lines ): array {
+		$literals = [];
+		$regex    = [];
+		foreach ( $lines as $line ) {
+			$line = trim( (string) $line );
+			if ( $line === '' ) { continue; }
+			// Regex if starts and ends with /, allow optional flags like i,m,s,u
+			if ( strlen( $line ) >= 2 && $line[0] === '/' && strrpos( $line, '/' ) !== 0 ) {
+				$last = strrpos( $line, '/' );
+				$pattern = substr( $line, 0, $last + 1 );
+				$flags   = substr( $line, $last + 1 );
+				// Validate pattern
+				$valid = @preg_match( $pattern . $flags, '' );
+				if ( $valid !== false ) {
+					$regex[] = $pattern . $flags;
+					continue;
+				}
+			}
+			$literals[] = $line;
+		}
+		return [ 'literals' => array_values( array_unique( $literals ) ), 'regex' => array_values( array_unique( $regex ) ) ];
+	}
+
+	/**
+	 * Build a candidate URL list used when resolving regex in Additional URLs.
+	 * This is a best-effort set: home/front page, all public posts, term links, author links,
+	 * and common archive/pagination URLs. Filterable and capped by limits.
+	 *
+	 * @return string[]
+	 */
+	public static function candidate_urls_for_regex(): array {
+		$limit = (int) apply_filters( 'ss_regex_candidate_url_limit', 5000 );
+		$urls  = [];
+		$urls[] = home_url( '/' );
+		if ( 'page' === get_option( 'show_on_front' ) ) {
+			$front_id = (int) get_option( 'page_on_front' );
+			if ( $front_id ) {
+				$u = get_permalink( $front_id ); if ( is_string( $u ) ) { $urls[] = $u; }
+			}
+		}
+		// Posts and pages of public types
+		$post_types = get_post_types( [ 'public' => true ], 'names' );
+		unset( $post_types['attachment'] );
+		$post_types = apply_filters( 'simply_static_post_types_to_crawl', $post_types );
+		$q = [ 'post_type' => $post_types, 'post_status' => 'publish', 'posts_per_page' => -1, 'fields' => 'ids' ];
+		$ids = get_posts( $q );
+		foreach ( (array) $ids as $pid ) {
+			$u = get_permalink( $pid ); if ( is_string( $u ) ) { $urls[] = $u; }
+			if ( count( $urls ) >= $limit ) { break; }
+		}
+		if ( count( $urls ) < $limit ) {
+			// Terms
+			$taxes = get_taxonomies( [ 'public' => true ], 'names' );
+			foreach ( $taxes as $tx ) {
+				$terms = get_terms( [ 'taxonomy' => $tx, 'hide_empty' => true ] );
+				if ( is_wp_error( $terms ) ) { continue; }
+				foreach ( $terms as $term ) {
+					$u = get_term_link( $term ); if ( ! is_wp_error( $u ) ) { $urls[] = $u; }
+					if ( count( $urls ) >= $limit ) { break 2; }
+				}
+			}
+		}
+		if ( count( $urls ) < $limit ) {
+			// Authors
+			$users = get_users( [ 'who' => 'authors' ] );
+			foreach ( (array) $users as $user ) {
+				$u = get_author_posts_url( $user->ID ); if ( is_string( $u ) ) { $urls[] = $u; }
+				if ( count( $urls ) >= $limit ) { break; }
+			}
+		}
+		return array_values( array_unique( $urls ) );
+	}
+
+	/**
+	 * Determine if a URL should be excluded based on settings and patterns.
+	 * Centralized helper used by crawlers and fetch tasks.
+	 *
+	 * @param string $url
+	 * @return bool
+	 */
+	public static function is_url_excluded( string $url ): bool {
+		$excluded = array( '.php' );
+		$opts = Options::instance();
+
+		// Exclude debug files (.log, .txt) but not robots.txt
+		if ( preg_match( '/\.(log|txt)$/i', $url ) && strpos( $url, 'debug' ) !== false && strpos( $url, 'robots.txt' ) === false ) {
+			return true;
+		}
+
+		// Exclude feeds if add_feeds is not true.
+		if ( ! $opts->get( 'add_feeds' ) ) {
+			// Only exclude WordPress feed-style URLs
+			if ( preg_match( '/(\/feed\/?$|\?feed=|\/feed\/|\/rss\/?$|\/atom\/?$)/i', $url ) ) {
+				return true;
+			}
+		}
+
+		// Exclude Rest API if add_rest_api is not true.
+		if ( ! $opts->get( 'add_rest_api' ) ) {
+			$excluded[] = 'wp-json';
+		}
+
+		$urls_to_exclude = $opts->get( 'urls_to_exclude' );
+		$regex_patterns  = [];
+		if ( ! empty( $urls_to_exclude ) ) {
+			if ( is_array( $urls_to_exclude ) ) {
+				$excluded_by_option = wp_list_pluck( $urls_to_exclude, 'url' );
+			} else {
+				$excluded_by_option = explode( "\n", $urls_to_exclude );
+			}
+
+			if ( is_array( $excluded_by_option ) ) {
+				// Normalize: trim whitespace/CRLF, drop empties, unique
+				$excluded_by_option = array_filter( array_map( 'trim', $excluded_by_option ), function ( $v ) {
+					return $v !== '';
+				} );
+				$excluded_by_option = array_unique( $excluded_by_option );
+				$parsed = self::parse_patterns( $excluded_by_option );
+				$excluded = array_merge( $excluded, $parsed['literals'] );
+				$regex_patterns = $parsed['regex'];
+			}
+		}
+
+		if ( apply_filters( 'simply_static_exclude_temp_dir', true ) ) {
+			$excluded[] = self::get_temp_dir_url();
+		}
+
+		$excluded = apply_filters( 'ss_excluded_by_default', $excluded );
+
+		if ( $excluded ) {
+			$excluded = array_filter( $excluded );
+		}
+
+		// First test regex patterns if provided
+		foreach ( (array) $regex_patterns as $pattern ) {
+			if ( @preg_match( $pattern, $url ) ) {
+				if ( preg_match( $pattern, $url ) ) { return true; }
+			}
+		}
+
+		// Then test literal contains (case-insensitive)
+		if ( ! empty( $excluded ) ) {
+			foreach ( $excluded as $excludable ) {
+				if ( stripos( $url, $excludable ) !== false ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get all active plugins for the current site, including network-activated plugins on multisite.
+	 *
+	 * Returns a list of plugin basenames (e.g. akismet/akismet.php).
+	 *
+	 * @return array
+	 */
+	public static function get_all_active_plugins(): array {
+		$active = (array) get_option( 'active_plugins', [] );
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+			// Network-activated plugins are stored as an associative array with plugin file as the key.
+			$network = (array) get_site_option( 'active_sitewide_plugins', [] );
+			$network_plugins = array_keys( $network );
+			$active = array_merge( $active, $network_plugins );
+		}
+		$active = array_values( array_unique( $active ) );
+		sort( $active );
+		return $active;
+	}
+
+	/**
+	 * Compute the target Static Site URL based on Simply Static settings.
+	 * Returns an empty string if it cannot be determined.
+	 *
+	 * Logic:
+	 * - destination_url_type = 'relative' and relative_path not empty:
+	 *   Use the current site's scheme (https if wp_is_using_https() or is_ssl()),
+	 *   then build home_url( '/', $scheme ) + relative_path.
+	 * - destination_url_type = 'absolute' with non-empty destination_scheme and destination_host:
+	 *   Normalize and return scheme://host.
+	 *
+	 * @return string The static site URL or empty string when unavailable.
+	 */
+	public static function get_static_site_url() {
+		$options = get_option( 'simply-static' );
+		if ( empty( $options ) || ! is_array( $options ) ) {
+			return '';
+		}
+
+		$type = isset( $options['destination_url_type'] ) ? strtolower( trim( $options['destination_url_type'] ) ) : '';
+		$target_url = '';
+
+		if ( 'relative' === $type ) {
+			$relative_path = isset( $options['relative_path'] ) ? trim( $options['relative_path'] ) : '';
+			if ( $relative_path !== '' ) {
+				$scheme   = ( function_exists( 'wp_is_using_https' ) && wp_is_using_https() ) ? 'https' : ( is_ssl() ? 'https' : 'http' );
+				$base_url = home_url( '/', $scheme );
+				$target_url = trailingslashit( $base_url ) . ltrim( $relative_path, '/' );
+			}
+		} elseif ( 'absolute' === $type ) {
+			$scheme = isset( $options['destination_scheme'] ) ? trim( $options['destination_scheme'] ) : '';
+			$host   = isset( $options['destination_host'] ) ? trim( $options['destination_host'] ) : '';
+			if ( $scheme !== '' && $host !== '' ) {
+				$scheme = preg_replace( '/:\\/*$/', '', $scheme );
+				$host   = preg_replace( '/^\\/*/', '', $host );
+				$target_url = $scheme . '://' . $host;
+			}
+		}
+
+		return $target_url;
+	}
+
 	/**
 	 * Get the protocol used for the origin URL
 	 * @return string http or https
@@ -91,6 +628,10 @@ class Util {
 
 		$debug_file = self::get_debug_log_filename();
 
+		if ( ! file_exists( $debug_file ) ) {
+			wp_mkdir_p( dirname( $debug_file ) );
+		}
+
 		// add timestamp and newline
 		$message = '[' . date( 'Y-m-d H:i:s' ) . '] ';
 
@@ -127,24 +668,9 @@ class Util {
 		$options = get_option( 'simply-static' );
 
 		if ( isset( $options['encryption_key'] ) ) {
-			$htaccess_file = get_home_path() . '.htaccess';
-
-			if ( file_exists( $htaccess_file ) && ! is_multisite() ) {
-				// Set up log file path.
-				$log_file = untrailingslashit( $simply_static_dir ) . DIRECTORY_SEPARATOR . $options['encryption_key'] . '-debug.txt';
-
-				// Write to .htaccess file.
-				$htaccess_inner_content = "\nrequire all denied\nrequire host localhost\n";
-				$htaccess_file_content  = '<Files "' . $log_file . '">' . $htaccess_inner_content . '</Files>';
-
-				if ( file_exists( $log_file ) ) {
-					insert_with_markers( $htaccess_file, 'Simply Static', $htaccess_file_content );
-				}
-			}
-
-			return $simply_static_dir . $options['encryption_key'] . '-debug.txt';
+			return apply_filters( 'ss_debug_log_file', $simply_static_dir . $options['encryption_key'] . '-debug.txt', $options['encryption_key'] );
 		} else {
-			return $simply_static_dir . 'debug.txt';
+			return apply_filters( 'ss_debug_log_file', $simply_static_dir . 'debug.txt', '' );
 		}
 	}
 
@@ -156,16 +682,39 @@ class Util {
 	 * @return string         String containing the contents of the object
 	 */
 	protected static function get_contents_from_object( $object ) {
+		// Handle common scalar types early and safely
 		if ( is_string( $object ) ) {
-			return $object;
+			// Prevent huge memory usage by truncating very large strings
+			return self::truncate( $object, 5000 );
+		}
+		if ( is_null( $object ) ) {
+			return 'NULL';
+		}
+		if ( is_bool( $object ) ) {
+			return $object ? 'TRUE' : 'FALSE';
+		}
+		if ( is_int( $object ) || is_float( $object ) ) {
+			return (string) $object;
+		}
+		if ( is_resource( $object ) ) {
+			return 'resource(' . get_resource_type( $object ) . ')';
 		}
 
-		ob_start();
-		var_dump( $object );
-		$contents = ob_get_contents();
-		ob_end_clean();
+		// For arrays/objects, avoid var_dump which can explode memory usage.
+		// Prefer JSON with partial output on error; fall back to print_r.
+		$max_length = apply_filters( 'simply_static_debug_max_length', 100000 ); // 100 KB by default
+		$json_opts  = defined( 'JSON_PARTIAL_OUTPUT_ON_ERROR' ) ? JSON_PARTIAL_OUTPUT_ON_ERROR : 0;
+		$encoded    = function_exists( 'wp_json_encode' ) ? wp_json_encode( $object, $json_opts, 5 ) : json_encode( $object, $json_opts, 5 );
 
-		return $contents;
+		if ( $encoded === false || $encoded === null ) {
+			$encoded = print_r( $object, true );
+		}
+
+		if ( strlen( $encoded ) > $max_length ) {
+			$encoded = substr( $encoded, 0, $max_length ) . '... [truncated]';
+		}
+
+		return $encoded;
 	}
 
 	public static function is_valid_scheme( $scheme ) {
@@ -193,6 +742,11 @@ class Util {
 	 * @return string|null                   Absolute URL, or null
 	 */
 	public static function relative_to_absolute_url( $extracted_url, $page_url ) {
+
+		// we can't do anything with null or blank urls
+		if ( $extracted_url === null ) {
+			return null;
+		}
 
 		$extracted_url = trim( $extracted_url );
 
@@ -284,7 +838,7 @@ class Util {
 	public static function create_offline_path( $extracted_path, $page_path, $iterations = 0 ) {
 		// We're done if we get a match between the path of the page and the extracted URL
 		// OR if there are no more slashes to remove
-		if ( strpos( $page_path, '/' ) === false || strpos( $extracted_path, $page_path ) === 0 ) {
+		if ( strpos( $page_path, '/' ) === false || strpos( $extracted_path, trailingslashit( $page_path ) ) === 0 ) {
 			$extracted_path = substr( $extracted_path, strlen( $page_path ) );
 			$iterations     = ( $iterations == 0 ) ? 0 : $iterations - 1;
 			$new_path       = '.' . str_repeat( '/..', $iterations ) . self::add_leading_slash( $extracted_path );
@@ -318,13 +872,14 @@ class Util {
 	 *
 	 * @return bool
 	 */
-	public static function is_cron(): bool {
-		if ( ! defined( 'DISABLE_WP_CRON' ) || DISABLE_WP_CRON !== true || defined( 'SS_CRON' ) ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+ public static function is_cron(): bool {
+        // Return false only when WP-Cron is explicitly disabled and no SS_CRON override is set.
+        $wp_cron_disabled = ( defined( 'DISABLE_WP_CRON' ) && ( true === constant( 'DISABLE_WP_CRON' ) ) );
+        if ( $wp_cron_disabled && ! defined( 'SS_CRON' ) ) {
+            return false;
+        }
+        return true;
+    }
 
 	/**
 	 * Get the path from a local URL, removing the protocol and host
@@ -359,6 +914,10 @@ class Util {
 	 * @return array            Converted array
 	 */
 	public static function string_to_array( $textarea ) {
+		if ( ! is_string( $textarea ) ) {
+			return array();
+		}
+
 		// using preg_split to intelligently break at newlines
 		// see: http://stackoverflow.com/questions/1483497/how-to-put-string-in-array-split-by-new-line
 		$lines = preg_split( "/\r\n|\n|\r/", $textarea );
@@ -460,26 +1019,16 @@ class Util {
 		}
 
 		$allowed_asset_extensions = apply_filters( 'simply_static_allowed_local_asset_extensions', [
-			'webp',
-			'gif',
-			'jpg',
-			'jpeg',
-			'png',
-			'svg',
-			'mp4',
-			'webm',
-			'ogg',
-			'ogv',
-			'mp3',
-			'wav',
-			'json',
-			'js',
-			'css',
-			'xml',
-			'csv',
-			'pdf',
-			'txt',
-			'cur'
+			// Images
+			'webp', 'gif', 'jpg', 'jpeg', 'png', 'svg', 'ico', 'cur',
+			// Media
+			'mp4', 'webm', 'ogg', 'ogv', 'mp3', 'wav',
+			// Data/Docs
+			'json', 'xml', 'csv', 'pdf', 'txt',
+			// Web assets
+			'js', 'css',
+			// Fonts
+			'woff2', 'woff', 'ttf', 'eot', 'otf'
 		] );
 
 		$path_info = self::url_path_info( $url );
@@ -515,6 +1064,9 @@ class Util {
 	 * @param string $path File path to remove leading directory separators from
 	 */
 	public static function remove_leading_directory_separator( $path ) {
+		if ( $path === null ) {
+			return '';
+		}
 		return ltrim( $path, DIRECTORY_SEPARATOR );
 	}
 
@@ -533,6 +1085,9 @@ class Util {
 	 * @param string $path URL path to remove leading slash from
 	 */
 	public static function remove_leading_slash( $path ) {
+		if ( $path === null ) {
+			return '';
+		}
 		return ltrim( $path, '/' );
 	}
 
@@ -542,16 +1097,20 @@ class Util {
 	 * @param array $messages Array of messages to add the message to
 	 * @param string $task_name Name of the task
 	 * @param string $message Message to display about the status of the job
+	 * @param boolean $unique If unique, the task_name/key will get a prefix if the same exists.
 	 *
 	 * @return array
 	 */
-	public static function add_archive_status_message( $messages, $task_name, $message ) {
+	public static function add_archive_status_message( $messages, $task_name, $message, $unique = false ) {
 		if ( ! is_array( $messages ) ) {
 			$messages = array();
 		}
 
 		// if the state exists, set the datetime and message
-		if ( ! array_key_exists( $task_name, $messages ) ) {
+		if ( ! array_key_exists( $task_name, $messages ) || $unique ) {
+			if ( $unique ) {
+				$task_name = $task_name . '_' . uniqid();
+			}
 			$messages[ $task_name ] = array(
 				'message'  => $message,
 				'datetime' => self::formatted_datetime()
@@ -571,10 +1130,29 @@ class Util {
 	 * @return string
 	 */
 	public static function abs_path_to_url( $path = '' ) {
+		$normalized_path = wp_normalize_path( $path );
+
+		// Check if the path is within WP_CONTENT_DIR
+		if ( defined( 'WP_CONTENT_DIR' ) && defined( 'WP_CONTENT_URL' ) ) {
+			$normalized_content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+
+			// If the path starts with the content directory, use WP_CONTENT_URL for replacement
+			if ( strpos( $normalized_path, $normalized_content_dir ) === 0 ) {
+				$url = str_replace(
+					$normalized_content_dir,
+					untrailingslashit( WP_CONTENT_URL ),
+					$normalized_path
+				);
+
+				return esc_url_raw( $url );
+			}
+		}
+
+		// Default behavior for paths not in WP_CONTENT_DIR
 		$url = str_replace(
 			wp_normalize_path( untrailingslashit( ABSPATH ) ),
 			site_url(),
-			wp_normalize_path( $path )
+			$normalized_path
 		);
 
 		return esc_url_raw( $url );
@@ -612,6 +1190,38 @@ class Util {
 	 */
 	public static function normalize_slashes( string $path ): string {
 		return strpos( $path, '\\' ) !== false ? str_replace( '\\', '/', $path ) : $path;
+	}
+
+	/**
+	 * Build a safe relative path from an absolute path and its base directory.
+	 * Ensures forward slashes and a leading slash for consistent URL building.
+	 *
+	 * @param string $base_dir      The base directory (prefix) of the absolute path.
+	 * @param string $absolute_path The absolute path to the file.
+	 * @return string               The normalized relative path starting with '/'.
+	 */
+	public static function safe_relative_path( string $base_dir, string $absolute_path ): string {
+		$dir_norm = rtrim( $base_dir, DIRECTORY_SEPARATOR );
+		$rel      = substr( $absolute_path, strlen( $dir_norm ) );
+		if ( $rel === false ) {
+			$rel = str_replace( $base_dir, '', $absolute_path );
+		}
+		$rel = str_replace( '\\', '/', $rel );
+		if ( $rel === '' || $rel[0] !== '/' ) {
+			$rel = '/' . ltrim( $rel, '/' );
+		}
+		return $rel;
+	}
+
+	/**
+	 * Join a base URL and a relative path with exactly one slash.
+	 *
+	 * @param string $base_url      Base URL (may end with or without a slash).
+	 * @param string $relative_path Relative path (may start with or without a slash).
+	 * @return string               The joined URL.
+	 */
+	public static function safe_join_url( string $base_url, string $relative_path ): string {
+		return rtrim( $base_url, '/' ) . '/' . ltrim( $relative_path, '/' );
 	}
 
 	/**
@@ -678,22 +1288,91 @@ class Util {
 			'aws_empty',
 			'create_zip_archive',
 			'transfer_files_locally',
+			'github_blobs',
 			'github_commit',
 			'bunny_deploy',
 			'tiiny_deploy',
 			'aws_deploy',
 			'sftp_deploy',
-			'simply_cdn'
 		];
 
-		foreach( $tasks as $task ) {
-			delete_transient( 'simply_static_' . $task . '_total_pages' );
+		foreach ( $tasks as $task ) {
+			delete_option( 'simply_static_' . $task . '_total_pages' );
+		}
+	}
+
+	public static function get_temp_dir_url() {
+		$dir = self::get_temp_dir();
+
+		return self::abs_path_to_url( $dir );
+	}
+
+	/*
+	 * Get the absolute path to the temporary file directory.
+	 *
+	 */
+	public static function get_temp_dir() {
+		$options = get_option( 'simply-static' );
+
+		if ( empty( $options['temp_files_dir'] ) ) {
+			$upload_dir = wp_upload_dir();
+			$temp_dir   = $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'simply-static' . DIRECTORY_SEPARATOR . 'temp-files';
+
+			// Check if directory exists.
+			if ( ! is_dir( $temp_dir ) ) {
+				wp_mkdir_p( $temp_dir );
+			}
+
+		} else {
+			$temp_dir = $options['temp_files_dir'];
 		}
 
-		// Misc.
-		delete_transient( 'ssp_sftp_deploy_start_time' );
-		delete_transient( 'ssp_search_index_start_time' );
-		delete_transient( 'ssp_github_blobs' );
-		delete_transient( 'ssp_search_results' );
+		return trailingslashit( $temp_dir );
+	}
+
+	/**
+	 * Recursively delete contents of a directory but keep the directory itself.
+	 *
+	 * Rules:
+	 * - No error suppression operators (@). We perform checks before FS calls to avoid warnings.
+	 * - Very defensive: do nothing for empty/non-dirs and for very shallow paths.
+	 *
+	 * @param string $dir Absolute path to the directory whose contents should be cleared.
+	 * @return void
+	 */
+	public static function delete_dir_contents( string $dir ): void {
+		$dir = (string) $dir;
+		if ( $dir === '' || ! is_dir( $dir ) ) {
+			return;
+		}
+		$normalized = str_replace( '\\', '/', $dir );
+		// Safety guard: do not operate on very shallow paths (like root-level). Require at least 3 path segments.
+		if ( substr_count( trim( $normalized, '/' ), '/' ) < 2 ) {
+			return;
+		}
+		$items = scandir( $dir );
+		if ( $items === false ) {
+			return;
+		}
+		foreach ( $items as $item ) {
+			if ( $item === '.' || $item === '..' ) {
+				continue;
+			}
+			$path = $dir . DIRECTORY_SEPARATOR . $item;
+			if ( is_dir( $path ) && ! is_link( $path ) ) {
+				self::delete_dir_contents( $path );
+				// Remove the now-empty directory if possible.
+				if ( is_dir( $path ) && is_writable( $path ) ) {
+					rmdir( $path );
+				}
+			} else {
+				// Files or links
+				if ( ( is_file( $path ) || is_link( $path ) ) && ( file_exists( $path ) || is_link( $path ) ) ) {
+					if ( is_writable( $path ) ) {
+						unlink( $path );
+					}
+				}
+			}
+		}
 	}
 }

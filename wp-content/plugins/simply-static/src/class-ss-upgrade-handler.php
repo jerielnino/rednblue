@@ -60,21 +60,15 @@ class Upgrade_Handler {
 		self::$options = Options::instance();
 
 		// Check if directory exists, if not, create it.
-		$upload_dir = wp_upload_dir();
-		$temp_dir   = $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'simply-static' . DIRECTORY_SEPARATOR . 'temp-files';
-
-		// Check if directory exists.
-		if ( ! is_dir( $temp_dir ) ) {
-			wp_mkdir_p( $temp_dir );
-		}
+		Util::get_temp_dir();
 
 		self::$default_options = array(
 			'destination_scheme'            => 'https://',
 			'destination_host'              => '',
-			'temp_files_dir'                => trailingslashit( $temp_dir ),
+			'temp_files_dir'                => '',
 			'additional_urls'               => '',
 			'additional_files'              => '',
-			'urls_to_exclude'               => "wp-json\nwp-login.php",
+			'urls_to_exclude'               => "",
 			'delivery_method'               => 'zip',
 			'local_dir'                     => '',
 			'relative_path'                 => '',
@@ -87,12 +81,8 @@ class Upgrade_Handler {
 			'origin_url'                    => '',
 			'force_replace_url'             => true,
 			'clear_directory_before_export' => false,
-			'ssh_security_token'            => '',
-			'ssh_use_forms'                 => true,
 			'iframe_urls'                   => '',
 			'iframe_custom_css'             => '',
-			'ssh_404_page_id'               => '',
-			'ssh_thank_you_page_id'         => '',
 			'tiiny_email'                   => get_bloginfo( 'admin_email' ),
 			'tiiny_subdomain'               => '',
 			'tiiny_domain_suffix'           => 'tiiny.site',
@@ -113,13 +103,20 @@ class Upgrade_Handler {
 			'github_webhook_url'            => '',
 			'github_folder_path'            => '',
 			'github_throttle_requests'      => false,
+			'aws_auth_method'               => 'aws-iam-key',
 			'aws_region'                    => 'us-east-2',
 			'aws_access_key'                => '',
 			'aws_access_secret'             => '',
 			'aws_bucket'                    => '',
 			'aws_subdirectory'              => '',
 			'aws_distribution_id'           => '',
+			'aws_webhook_url'               => '',
 			'aws_empty'                     => false,
+			's3_access_key'                 => '',
+			's3_base_url'                   => '',
+			's3_access_secret'              => '',
+			's3_bucket'                     => '',
+			's3_subdirectory'               => '',
 			'fix_cors'                      => 'allowed_http_origins',
 			'static_url'                    => '',
 			'use_forms'                     => false,
@@ -133,6 +130,7 @@ class Upgrade_Handler {
 			'search_excludable'             => '',
 			'search_metadata'               => '',
 			'fuse_selector'                 => '.search-field',
+			'fuse_threshold'                => 0.1,
 			'algolia_app_id'                => '',
 			'algolia_admin_api_key'         => '',
 			'algolia_search_api_key'        => '',
@@ -144,17 +142,18 @@ class Upgrade_Handler {
 			'minify_inline_css'             => false,
 			'minify_js'                     => false,
 			'minify_inline_js'              => false,
-			'generate_404'                  => true,
+   'generate_404'                  => false,
+            'custom_404_page'              => 0,
+			'add_feeds'                     => false,
+			'add_rest_api'                  => false,
+			'smart_crawl'                   => true,
 			'wp_content_folder'             => '',
 			'wp_includes_folder'            => '',
 			'wp_uploads_folder'             => '',
 			'wp_plugins_folder'             => '',
 			'wp_themes_folder'              => '',
 			'theme_style_name'              => 'style',
-			'rename_plugin_folders'         => false,
 			'author_url'                    => '',
-			'hide_rest_api'                 => false,
-			'hide_style_id'                 => false,
 			'hide_comments'                 => false,
 			'hide_version'                  => false,
 			'hide_generator'                => false,
@@ -175,6 +174,7 @@ class Upgrade_Handler {
 			'archive_name'                  => null,
 			'archive_start_time'            => null,
 			'archive_end_time'              => null,
+			'version'                       => SIMPLY_STATIC_VERSION,
 		);
 
 		$version = self::$options->get( 'version' );
@@ -187,6 +187,9 @@ class Upgrade_Handler {
 			if ( version_compare( $version, SIMPLY_STATIC_VERSION, '!=' ) ) {
 				// Sync database.
 				Page::create_or_update_table();
+
+				// Clean up renamed crawlers in the crawlers option
+				self::cleanup_renamed_crawlers();
 
 				// Update version.
 				self::$options
@@ -203,9 +206,63 @@ class Upgrade_Handler {
 	 */
 	protected static function set_default_options() {
 		foreach ( self::$default_options as $option_key => $option_value ) {
-			if ( self::$options->get( $option_key ) === null ) {
+			// For new installations, ensure smart_crawl is set to true
+			if ( $option_key === 'smart_crawl' ) {
+				self::$options->set( $option_key, true );
+			} else if ( self::$options->get( $option_key ) === null ) {
 				self::$options->set( $option_key, $option_value );
 			}
+		}
+
+		// Save the options
+		self::$options->save();
+	}
+
+	/**
+	 * Clean up renamed crawlers in the crawlers option
+	 *
+	 * @return void
+	 */
+	protected static function cleanup_renamed_crawlers() {
+		$crawlers = self::$options->get( 'crawlers' );
+
+		// If crawlers is not an array or is empty, nothing to do
+		if ( ! is_array( $crawlers ) || empty( $crawlers ) ) {
+			return;
+		}
+
+		$updated = false;
+
+		// Check for old crawler IDs and replace them with new ones
+		$crawler_replacements = [
+			'block_theme' => 'wp_includes'
+		];
+
+		foreach ( $crawler_replacements as $old_id => $new_id ) {
+			$old_id_index = array_search( $old_id, $crawlers, true );
+
+			// If the old ID exists in the array
+			if ( $old_id_index !== false ) {
+				// Remove the old ID
+				unset( $crawlers[ $old_id_index ] );
+
+				// Add the new ID if it doesn't already exist
+				if ( ! in_array( $new_id, $crawlers, true ) ) {
+					$crawlers[] = $new_id;
+				}
+
+				$updated = true;
+			}
+		}
+
+		// If we made changes, save the updated crawlers
+		if ( $updated ) {
+			// Reindex the array to ensure sequential numeric keys
+			$crawlers = array_values( $crawlers );
+
+			self::$options->set( 'crawlers', $crawlers )->save();
+
+			\Simply_Static\Util::debug_log( 'Updated crawler IDs in options: ' . implode( ', ', $crawlers ) );
 		}
 	}
 }
