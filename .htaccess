@@ -1,7 +1,7 @@
 RewriteEngine On
-RewriteCond %{HTTP_HOST} ^rednblue.uk.to$ [OR]
-RewriteCond %{HTTP_HOST} ^www.rednblue.uk.to$
-RewriteRule (.*)$ http://rednblue.uk.to/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^rednblue.sportgroup.cl$ [OR]
+RewriteCond %{HTTP_HOST} ^www.rednblue.sportgroup.cl$
+RewriteRule (.*)$ http://rednblue.sportgroup.cl/$1 [R=301,L]
 
 # BEGIN WordPress
 # The directives (lines) between "BEGIN WordPress" and "END WordPress" are

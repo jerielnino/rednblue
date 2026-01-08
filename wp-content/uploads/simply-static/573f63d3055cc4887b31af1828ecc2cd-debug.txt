@@ -5162,7 +5162,7 @@
 [2024-09-12 20:30:38] [class-ss-task.php:44] Status message: [transfer_files_locally] Transferred 8 of 8 files
 [2024-09-12 20:30:38] [trait-can-process-pages.php:103] Total pages: 8; Pages remaining: 0
 [2024-09-12 20:30:38] [class-ss-transfer-files-locally-task.php:238] Transferring 404 Page
-[2024-09-12 20:30:38] [class-ss-task.php:44] Status message: [destination_url] Destination URL: <a href="https://rednblue.uk.to/" target="_blank">https://rednblue.uk.to/</a>
+[2024-09-12 20:30:38] [class-ss-task.php:44] Status message: [destination_url] Destination URL: <a href="https://rednblue.sportgroup.cl/" target="_blank">https://rednblue.sportgroup.cl/</a>
 [2024-09-12 20:30:38] [class-ss-archive-creation-job.php:175] We've found our next task: wrapup
 [2024-09-12 20:30:38] [class-ss-archive-creation-job.php:136] Current task: wrapup
 [2024-09-12 20:30:38] [class-ss-archive-creation-job.php:153] Performing task: wrapup
