@@ -1,9 +1,9 @@
 === Frost ===
 Contributors: wpengine, bgardner
-Requires at least: 6.5
-Tested up to: 6.5.2
-Requires PHP: 7.0
-Stable tag: 1.0.9
+Requires at least: 6.7
+Tested up to: 6.7
+Requires PHP: 7.2
+Stable tag: 1.0.10
 License: GNU General Public License v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,6 +13,10 @@ With its clean, minimal design and powerful feature set, Frost enables agencies 
 
 
 == Changelog ==
+
+= 1.0.10 - 2025-3-10 =
+
+[Release Notes](https://github.com/wpengine/frost/releases/tag/v1.0.10)
 
 = 1.0.9 - 2024-4-19 =
 
